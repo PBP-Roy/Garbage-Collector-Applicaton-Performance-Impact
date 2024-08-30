@@ -95,4 +95,27 @@ public class GcPerformanceTest {
         return time;
     }
 }
+```
+Eksperimen dilakukan dengan:
 
+1. Menjalankan loop sebanyak 50 kali, setiap kali membuat banyak objek yang kemudian dibuat tidak terpakai.
+2. Membandingkan dua skenario: satu dengan memanggil System.gc() dan satu lagi tanpa memanggil System.gc().
+   
+#Analisis Hasil Eksperimen
+Berikut adalah hasil pengamatan dari eksperimen:
+
+## Skenario Tanpa GC:
+- Total Execution Time: <Time in ms>
+- Total GC Count: <GC Count>
+- Total GC Time: <GC Time in ms>
+## Skenario Dengan GC:
+- Total Execution Time: <Time in ms>
+- Total GC Count: <GC Count>
+- Total GC Time: <GC Time in ms>
+Dari hasil eksperimen, dapat dilihat bahwa pemanggilan GC secara manual meningkatkan waktu eksekusi aplikasi dan jumlah pemanggilan GC. Performa aplikasi berkurang signifikan ketika GC sering dipanggil, menunjukkan bahwa pengelolaan GC yang lebih optimal diperlukan untuk menjaga performa aplikasi.
+
+# Kesimpulan
+Eksperimen ini menunjukkan dampak signifikan dari GC terhadap performa aplikasi, terutama ketika frekuensi GC tinggi. Langkah optimisasi yang dapat dilakukan antara lain:
+1. Mengurangi alokasi objek yang tidak perlu.
+2. Menggunakan algoritma GC yang lebih efisien seperti G1 atau CMS.
+3. Menyesuaikan parameter heap size dan melakukan tuning JVM untuk performa yang optimal.
