@@ -101,7 +101,7 @@ Eksperimen dilakukan dengan:
 1. Menjalankan loop sebanyak 50 kali, setiap kali membuat banyak objek yang kemudian dibuat tidak terpakai.
 2. Membandingkan dua skenario: satu dengan memanggil System.gc() dan satu lagi tanpa memanggil System.gc().
    
-#Analisis Hasil Eksperimen
+# Analisis Hasil Eksperimen
 Berikut adalah hasil pengamatan dari eksperimen:
 
 ## Skenario Tanpa GC:
