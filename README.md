@@ -121,5 +121,5 @@ Eksperimen ini menunjukkan dampak signifikan dari GC terhadap performa aplikasi,
 3. Menyesuaikan parameter heap size dan melakukan tuning JVM untuk performa yang optimal.
    
 <p align="center">
-<img src="Images\mermaid-diagram-2024-09-06-075209.png">
+<img src="\Images\mermaid-diagram-2024-09-06-075747.png">
 </p>
