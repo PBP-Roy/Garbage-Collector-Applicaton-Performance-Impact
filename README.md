@@ -119,3 +119,5 @@ Eksperimen ini menunjukkan dampak signifikan dari GC terhadap performa aplikasi,
 1. Mengurangi alokasi objek yang tidak perlu.
 2. Menggunakan algoritma GC yang lebih efisien seperti G1 atau CMS.
 3. Menyesuaikan parameter heap size dan melakukan tuning JVM untuk performa yang optimal.
+
+![Alt text](mermaid-diagram-2024-09-06-075209.png)
