@@ -1,157 +1,121 @@
+# Memory Management Paradigms
 
-# Garbage-Collector-Applicaton-Performance-Impact
-Studi Pengaruh Garbage Collector Terhadap Performansi Aplikasi
+## Studi Perbandingan antara Ownership, Garbage Collector, dan Manual Memory Management
 
-## Identifikasi Problem
-Garbage Collector (GC) dapat menyebabkan jeda dan penurunan performa aplikasi jika tidak dikelola dengan baik, terutama ketika frekuensi pengumpulannya terlalu tinggi.
+### Identifikasi Problem
+Pengelolaan memori adalah aspek kritis dalam pengembangan perangkat lunak. Tiga paradigma utama yang digunakan adalah Ownership (Rust), Garbage Collection (Java), dan Manual Memory Management (C). Masing-masing memiliki kelebihan dan kekurangan yang mempengaruhi performa aplikasi, terutama dalam konteks pengembangan perangkat lunak industri.
 
-## Relevansi dan Kepentingan Studi di Dunia Industri
+### Paradigma Pengelolaan Memori
 
-Studi tentang pengaruh Garbage Collector (GC) terhadap performa aplikasi menjadi relevan dan penting di dunia industri karena performa aplikasi yang buruk akibat pengelolaan memori yang tidak efisien dapat berdampak negatif pada operasi bisnis. Berikut beberapa contoh kasus nyata yang terjadi di industri:
+#### 1. Ownership (Rust)
+- **Deskripsi:** Rust menggunakan model kepemilikan untuk mengelola memori tanpa garbage collector. Setiap nilai memiliki pemilik tunggal, dan kepemilikan dapat dipindahkan. Aturan ini mencegah kebocoran memori dan memastikan keamanan thread.
+- **Kelebihan:**
+  - Menghindari overhead dari garbage collection.
+  - Mencegah kesalahan akses memori (data race) secara kompilasi.
+- **Kekurangan:**
+  - Memerlukan pembelajaran kurva yang lebih tinggi bagi pengembang baru.
+  - Memiliki batasan pada pola pemrograman tertentu untuk menjaga kepemilikan.
 
-### 1. Performa Aplikasi E-commerce
-Dalam aplikasi e-commerce besar seperti Amazon atau Alibaba, waktu respons aplikasi yang cepat sangat penting untuk pengalaman pengguna dan konversi penjualan. GC yang berjalan terlalu sering atau pada saat yang tidak tepat dapat menyebabkan jeda dalam pemrosesan transaksi, yang bisa mengakibatkan pengguna meninggalkan keranjang belanja mereka atau berpindah ke situs pesaing. Dalam kasus ini, GC yang tidak dioptimalkan dapat langsung mempengaruhi pendapatan perusahaan.
+#### 2. Garbage Collection (Java)
+- **Deskripsi:** Java menggunakan garbage collector untuk secara otomatis mengelola memori. Pengembang tidak perlu mengalokasikan atau membebaskan memori secara manual, sehingga mengurangi risiko kebocoran memori.
+- **Kelebihan:**
+  - Mempermudah pengelolaan memori, memungkinkan fokus pada logika bisnis.
+  - Mengurangi kesalahan akibat manajemen memori yang buruk.
+- **Kekurangan:**
+  - GC dapat menyebabkan jeda yang tidak terduga dan mempengaruhi responsivitas aplikasi.
+  - Overhead memori yang lebih tinggi karena pengumpulan sampah.
 
-### 2. Aplikasi Trading dan Keuangan
-Di sektor keuangan, aplikasi trading real-time memerlukan latensi yang sangat rendah untuk mengeksekusi perdagangan dalam hitungan milidetik. Contoh nyata termasuk platform trading saham atau valuta asing seperti Bloomberg Terminal atau platform trading algoritmik di bursa saham. Jika GC mengumpulkan sampah pada waktu kritis, itu dapat menyebabkan delay yang cukup untuk mempengaruhi hasil perdagangan, berpotensi menyebabkan kerugian finansial yang signifikan.
+#### 3. Manual Memory Management (C)
+- **Deskripsi:** C memberikan kontrol penuh kepada pengembang untuk mengelola memori dengan menggunakan fungsi seperti `malloc` dan `free`. Ini memberikan fleksibilitas tetapi juga menambah kompleksitas.
+- **Kelebihan:**
+  - Kontrol penuh atas alokasi dan de-alokasi memori, memungkinkan optimasi yang lebih baik.
+  - Dapat menghasilkan performa yang lebih tinggi di lingkungan terbatas sumber daya.
+- **Kekurangan:**
+  - Risiko kebocoran memori dan kesalahan akses memori yang lebih tinggi.
+  - Memerlukan lebih banyak perhatian dan perencanaan dari pengembang.
 
-### 3. Sistem Kendali Waktu Nyata (Real-Time Control Systems)
-Sistem kendali waktu nyata yang digunakan dalam industri seperti otomotif (misalnya, sistem kontrol mobil otonom) atau aerospace memerlukan konsistensi dan prediktabilitas dalam performa. Jeda yang disebabkan oleh GC dapat menyebabkan kegagalan sistem atau respons yang tidak tepat waktu, yang dalam konteks ini, dapat berujung pada risiko keselamatan atau kerugian material besar.
+### Metodologi Eksperimen
+Eksperimen ini bertujuan untuk membandingkan performa dan penggunaan memori dari ketiga paradigma dengan mengukur waktu eksekusi dan penggunaan memori dalam skenario yang sama.
 
-### 4. Layanan Streaming dan Media
-Perusahaan seperti Netflix, Disney+, atau YouTube menghadapi tantangan performa yang besar terkait dengan pemutaran video yang mulus tanpa buffer. GC yang tidak terkelola dengan baik dapat menyebabkan jeda atau lag selama streaming, mengurangi kualitas pengalaman pengguna dan berpotensi menyebabkan churn pelanggan. Dalam industri media, kecepatan dan kelancaran streaming adalah kunci untuk mempertahankan pengguna.
+1. **Setup Eksperimen:** Setiap bahasa pemrograman diimplementasikan dengan algoritma yang sama, yang menghasilkan array besar dengan angka acak.
+2. **Pengukuran:** Waktu eksekusi dan penggunaan memori dicatat untuk analisis.
 
-### 5. Aplikasi Berbasis Cloud dan Microservices
-Banyak aplikasi modern beroperasi di lingkungan cloud atau menggunakan arsitektur microservices, seperti yang diimplementasikan oleh perusahaan seperti Uber atau Spotify. Pada skala ini, efisiensi performa sangat penting untuk meminimalkan biaya operasional. GC yang berjalan terlalu sering dapat meningkatkan penggunaan CPU dan memperpanjang waktu respons aplikasi, yang pada akhirnya meningkatkan biaya cloud dan menurunkan kualitas layanan.
+### Hasil Eksperimen
+- **Rust (Ownership):**
+  - Execution Time: 72932 ms
+  - Memory Used: 394 MB
 
-## Mengapa Kasus Ini Harus Dicobakan?
+- **Java (Garbage Collection):**
+  - Execution Time: 1952 ms
+  - Memory Used: 383 MB
+  - Memory Used after GC: 0 MB
 
-1. **Optimasi Performa**: Memahami pengaruh GC terhadap performa aplikasi membantu dalam mengoptimalkan aplikasi untuk operasi bisnis yang lebih efisien dan responsif.
+- **C (Manual Management):**
+  - Execution Time: 2454 ms
+  - Memory Used: 384.20 MB
+  - Memory Used after deallocation: 2.73 MB
 
-2. **Skalabilitas dan Biaya**: Pengelolaan GC yang buruk dapat menyebabkan biaya yang lebih tinggi dalam skala besar, seperti biaya server tambahan atau peningkatan kapasitas cloud yang tidak perlu.
+### Analisis Hasil
+Hasil menunjukkan bahwa:
+- **Java** memiliki waktu eksekusi tercepat karena pengelolaan memori otomatis, tetapi dapat mengalami latensi akibat GC.
+- **C** menunjukkan performa yang baik, tetapi memerlukan perhatian lebih pada manajemen memori.
+- **Rust** memberikan keamanan memori terbaik tetapi dengan waktu eksekusi yang lebih lama karena overhead dari model kepemilikan.
 
-3. **Pengalaman Pengguna**: Pengaruh GC terhadap respons aplikasi secara langsung mempengaruhi kepuasan dan retensi pengguna.
+# Analisis Kesesuaian Sistem Memori untuk Masalah Industri
 
-4. **Keamanan dan Kepatuhan**: Di industri yang sangat bergantung pada waktu nyata atau memerlukan performa tinggi, pengelolaan memori yang optimal bukan hanya tentang efisiensi, tetapi juga keselamatan dan kepatuhan terhadap standar industri.
+## Hasil Eksperimen
+Berikut adalah hasil pengukuran waktu eksekusi dan penggunaan memori untuk masing-masing bahasa pemrograman dalam eksperimen:
 
-Studi kasus ini sangat penting di industri untuk memastikan bahwa aplikasi tidak hanya berfungsi dengan benar tetapi juga efisien dan dapat diandalkan, menjaga bisnis tetap kompetitif dan aman dalam operasinya.
+- **Rust (Ownership):**
+  - Execution Time: 72932 ms
+  - Memory Used: 394 MB
+
+- **Java (Garbage Collection):**
+  - Execution Time: 1952 ms
+  - Memory Used: 383 MB
+  - Memory Used after GC: 0 MB
+
+- **C (Manual Management):**
+  - Execution Time: 2454 ms
+  - Memory Used: 384.20 MB
+  - Memory Used after deallocation: 2.73 MB
+
+## Kesesuaian Sistem Memori dengan Masalah Industri
+
+### 1. High-Performance Computing (HPC)
+- **C (Manual Management):**
+  - **Kesesuaian:** C memberikan kontrol penuh atas alokasi dan de-alokasi memori, yang sangat penting dalam HPC di mana performa dan efisiensi memori adalah kunci. Dengan waktu eksekusi yang rendah (2454 ms), C memungkinkan optimasi tingkat tinggi untuk aplikasi yang memerlukan komputasi intensif.
+  - **Output:** Meskipun memiliki risiko kebocoran memori, kemampuan C untuk mencapai performa tinggi menjadikannya pilihan solid untuk aplikasi HPC.
+
+- **Rust (Ownership):**
+  - **Kesesuaian:** Rust menawarkan keamanan memori yang kuat dengan sistem ownership. Meskipun waktu eksekusinya lebih tinggi (72932 ms), keunggulan ini dapat mengurangi potensi kesalahan yang dapat terjadi dalam manajemen memori, menjadikannya relevan untuk aplikasi HPC yang juga harus aman dan dapat diandalkan.
+  - **Output:** Rust dapat menghindari kebocoran memori yang bisa terjadi di C, sehingga menjadi pilihan menarik untuk HPC yang memerlukan keamanan dan stabilitas.
+
+### 2. Real-Time Systems
+- **Java (Garbage Collection):**
+  - **Kesesuaian:** Java mudah digunakan dan menyediakan banyak pustaka yang membantu dalam pengembangan aplikasi real-time. Namun, overhead dari garbage collection dapat menyebabkan latensi yang tidak terduga (waktu eksekusi 1952 ms), yang dapat mengganggu responsivitas aplikasi.
+  - **Output:** Meskipun performanya cukup baik, GC dapat menjadi masalah dalam sistem yang memerlukan waktu respons deterministik.
+
+- **C (Manual Management):**
+  - **Kesesuaian:** C memungkinkan kontrol penuh atas alokasi memori, menghasilkan waktu eksekusi yang stabil dan deterministik, cocok untuk aplikasi real-time yang memerlukan respons cepat.
+  - **Output:** Dengan waktu eksekusi yang rendah, C lebih dapat diandalkan untuk sistem real-time dibandingkan Java.
+
+### 3. Resource-Constrained Environments
+- **Rust (Ownership):**
+  - **Kesesuaian:** Rust memberikan efisiensi memori yang tinggi dengan keamanan yang lebih baik. Meskipun penggunaan memori lebih besar (394 MB), keamanan yang ditawarkan sangat penting dalam perangkat IoT dan sistem embedded.
+  - **Output:** Rust dapat mengelola sumber daya secara efisien, menjadikannya pilihan baik untuk lingkungan terbatas.
+
+- **C (Manual Management):**
+  - **Kesesuaian:** C juga efisien dalam penggunaan memori, tetapi memerlukan perhatian lebih untuk menghindari kesalahan manajemen. Meskipun waktu eksekusi lebih tinggi daripada Java, C tetap sangat efisien dalam kondisi terbatas.
+  - **Output:** C tetap relevan dalam pengembangan perangkat yang memerlukan kontrol sumber daya yang ketat.
+
+## Kesimpulan
+Dari analisis ini, dapat disimpulkan bahwa setiap sistem memori memiliki kelebihan dan kekurangan yang sesuai dengan masalah industri tertentu. C unggul dalam situasi yang memerlukan kontrol penuh dan performa tinggi, sementara Rust menawarkan keamanan yang lebih baik dengan trade-off dalam waktu eksekusi. Java, meskipun mudah digunakan, mungkin kurang cocok untuk aplikasi yang memerlukan latensi rendah. Oleh karena itu, pemilihan sistem memori yang tepat harus mempertimbangkan kebutuhan spesifik dari aplikasi dan industri.
 
 
-## Deskripsi Problem
-GC mengelola memori dalam bahasa pemrograman seperti Java dan C#. Namun, GC dapat memperlambat aplikasi jika terlalu banyak objek yang tidak lagi digunakan dan frekuensi pengumpulannya terlalu sering.
+### Kesimpulan Umum
+- **Rust:** Memiliki keunggulan dalam banyak konteks, terutama dalam HPC dan Resource-Constrained Environments, berkat kombinasi performa, keamanan, dan efisiensi.
+- **C:** Masih sangat baik untuk aplikasi yang membutuhkan kontrol penuh dan efisiensi, terutama dalam sistem real-time.
+- **Java:** Meskipun mudah digunakan, mungkin tidak cocok untuk aplikasi yang memerlukan latensi rendah dan prediktabilitas, tetapi lebih baik untuk aplikasi dengan beban kerja yang lebih ringan.
 
-## Metodologi Eksperimen
-Eksperimen ini bertujuan untuk menganalisis bagaimana frekuensi GC mempengaruhi performa aplikasi. Metodologi yang digunakan adalah sebagai berikut:
-1. Implementasikan aplikasi dengan beban kerja berat yang menghasilkan banyak objek.
-2. Lacak waktu eksekusi GC dan ukur dampaknya terhadap waktu respons aplikasi.
-3. Bandingkan performa dengan dan tanpa pemanggilan GC.
-
-## Pelaksanaan Eksperimen
-Program diimplementasikan menggunakan Java dengan kode berikut:
-
-```java
-import java.lang.management.GarbageCollectorMXBean;
-import java.lang.management.ManagementFactory;
-import java.util.List;
-
-public class GcPerformanceTest {
-
-    private static final int SIZE = 1000000;
-    private static final int ITERATIONS = 50;
-
-    public static void main(String[] args) {
-        // Menjalankan eksperimen tanpa GC
-        System.out.println("Running test without GC calls...");
-        runExperiment(false);
-
-        // Menjalankan eksperimen dengan GC
-        System.out.println("\nRunning test with GC calls...");
-        runExperiment(true);
-    }
-
-    private static void runExperiment(boolean useGc) {
-        long startTime = System.currentTimeMillis();
-
-        // Mendapatkan informasi GC
-        List<GarbageCollectorMXBean> gcBeans = ManagementFactory.getGarbageCollectorMXBeans();
-        long initialGcCount = getTotalGcCount(gcBeans);
-        long initialGcTime = getTotalGcTime(gcBeans);
-
-        for (int i = 0; i < ITERATIONS; i++) {
-            long iterationStartTime = System.currentTimeMillis();
-            runTest();
-
-            if (useGc) {
-                // Memaksa GC untuk menjalankan pengumpulan sampah
-                System.gc();
-            }
-
-            long iterationEndTime = System.currentTimeMillis();
-            System.out.println("Iteration " + (i + 1) + " Execution Time: " + (iterationEndTime - iterationStartTime) + " ms");
-        }
-
-        long endTime = System.currentTimeMillis();
-        long finalGcCount = getTotalGcCount(gcBeans);
-        long finalGcTime = getTotalGcTime(gcBeans);
-
-        System.out.println("Total Execution Time: " + (endTime - startTime) + " ms");
-        System.out.println("Total GC Count: " + (finalGcCount - initialGcCount));
-        System.out.println("Total GC Time: " + (finalGcTime - initialGcTime) + " ms");
-    }
-
-    private static void runTest() {
-        // Membuat banyak objek di memori
-        int[] largeArray = new int[SIZE];
-
-        for (int i = 0; i < SIZE; i++) {
-            largeArray[i] = i;
-        }
-
-        // Memaksa objek-objek untuk menjadi tidak terpakai
-        largeArray = null;
-    }
-
-    private static long getTotalGcCount(List<GarbageCollectorMXBean> gcBeans) {
-        long count = 0;
-        for (GarbageCollectorMXBean gcBean : gcBeans) {
-            count += gcBean.getCollectionCount();
-        }
-        return count;
-    }
-
-    private static long getTotalGcTime(List<GarbageCollectorMXBean> gcBeans) {
-        long time = 0;
-        for (GarbageCollectorMXBean gcBean : gcBeans) {
-            time += gcBean.getCollectionTime();
-        }
-        return time;
-    }
-}
-```
-Eksperimen dilakukan dengan:
-
-1. Menjalankan loop sebanyak 50 kali, setiap kali membuat banyak objek yang kemudian dibuat tidak terpakai.
-2. Membandingkan dua skenario: satu dengan memanggil System.gc() dan satu lagi tanpa memanggil System.gc().
-   
-# Analisis Hasil Eksperimen
-Berikut adalah hasil pengamatan dari eksperimen:
-
-## Skenario Tanpa GC:
-- Total Execution Time: <Time in ms>
-- Total GC Count: <GC Count>
-- Total GC Time: <GC Time in ms>
-## Skenario Dengan GC:
-- Total Execution Time: <Time in ms>
-- Total GC Count: <GC Count>
-- Total GC Time: <GC Time in ms>
-Dari hasil eksperimen, dapat dilihat bahwa pemanggilan GC secara manual meningkatkan waktu eksekusi aplikasi dan jumlah pemanggilan GC. Performa aplikasi berkurang signifikan ketika GC sering dipanggil, menunjukkan bahwa pengelolaan GC yang lebih optimal diperlukan untuk menjaga performa aplikasi.
-
-# Kesimpulan
-Eksperimen ini menunjukkan dampak signifikan dari GC terhadap performa aplikasi, terutama ketika frekuensi GC tinggi. Langkah optimisasi yang dapat dilakukan antara lain:
-1. Mengurangi alokasi objek yang tidak perlu.
-2. Menggunakan algoritma GC yang lebih efisien seperti G1 atau CMS.
-3. Menyesuaikan parameter heap size dan melakukan tuning JVM untuk performa yang optimal.
-   
-<p align="center">
-<img src="\Images\mermaid-diagram-2024-09-06-075747.png">
-</p>
+Dalam rangkaian eksperimen ini, Rust dapat dianggap sebagai pilihan terbaik secara keseluruhan, terutama untuk aplikasi yang memerlukan keamanan memori dan efisiensi. Namun, untuk situasi di mana kontrol penuh atas memori diperlukan dan overhead GC tidak dapat diterima, C tetap menjadi pilihan yang solid.
